@@ -1,2 +1,2 @@
 # receipt_generator
-Generator reciepts 
+Generator receipts 
