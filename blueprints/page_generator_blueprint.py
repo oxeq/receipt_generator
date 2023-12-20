@@ -1,3 +1,5 @@
+import traceback
+
 from flask import Blueprint
 from flask import Flask, render_template
 from objects.db import db
@@ -6,43 +8,79 @@ import random
 import string
 from flask import request
 import json
+from objects.receipt import ReceiptInfo
+from auth.auth import check_receipt_token
 
-page_generator_blueprint = Blueprint('currencies', __name__)
+page_generator_blueprint = Blueprint('page_generator', __name__)
 
 
-@page_generator_blueprint.route('/receipt/generate', methods=['poas'])
-def genereator():
+@page_generator_blueprint.route('/receipt/add_receipt', methods=['POST'])
+@check_receipt_token
+def add_receipt():
 
     try:
-        admin_key = request.json['admin_key']
-        payment_number = request.json['payment_number']
-        target = request.json['target']
-        date = request.json['date']
-        steam_login = request.json['steam_login']
-        deposit_sum = request.json['deposit_sum']
-        payment_sum = request.json['payment_sum']
-        uuid = request.json['uuid']
+        transaction_id = str(request.json['transaction_id'])
+        date = int(request.json['date'])
+        steam_login = str(request.json['steam_login'])
+        sum_ = int(request.json['sum_'])
     except:
         return json.dumps({'success': False, 'error': 0})
 
-    # тут данные заносятся в бд
+    with db.session() as db_session:
+        data = db_session.execute(select(ReceiptInfo).where(
+            ReceiptInfo.transaction_id == transaction_id,
+        ).limit(1)).all()
+        db_session.close()
 
-    return json.dumps({'success': True})
-
-
-
-@page_generator_blueprint.route('/receipt/<uuid>', methods=['get'])
-def render(uuid):
-
-    # тут иницилизируюются данные из бд по uuid
-
-
-    return render_template(
-        'page.html',
-        payment_number=payment_number,
-        target=target,
-        date=date,
-        steam_login=steam_login,
-        deposit_sum=deposit_sum,
-        payment_sum=payment_sum
+    # проверка информации есть ли такой чек в базе данных
+    if len(data) > 0:
+        return json.dumps({'success': True})
+    else:
+        # занесение данных в базу данных
+        data = ReceiptInfo(
+            transaction_id=transaction_id,
+            date=date,
+            steam_login=steam_login,
+            sum=sum_
         )
+
+        with db.session() as db_session:
+            db_session.add(data)
+            db_session.commit()
+            db_session.close()
+
+        return json.dumps({'success': True})
+
+
+@page_generator_blueprint.route('/get_receipt', methods=['GET'])
+def get_receipt():
+
+    # получение информации о чеке
+    try:
+        transaction_id = str(request.args['transaction_id'])
+    except:
+        return json.dumps({'success': False, 'error': 0})
+
+    # получение информации
+    with db.session() as db_session:
+        data = db_session.execute(select(ReceiptInfo.date, ReceiptInfo.steam_login, ReceiptInfo.sum).where(
+            ReceiptInfo.transaction_id == transaction_id,
+        ).limit(1)).all()
+        db_session.close()
+
+    if len(data) == 0:
+        return json.dumps({'success': False, 'error': 1})
+    else:
+        date = data[0][0]
+        steam_login = data[0][1]
+        deposit_sum = data[0][2]
+
+        return render_template(
+                'page.html',
+                payment_number=transaction_id,
+                target='Steam СНГ',
+                date=date,
+                steam_login=steam_login,
+                deposit_sum=deposit_sum,
+                payment_sum=deposit_sum
+            )

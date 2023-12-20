@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap&subset=cyrillic">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="inner-container">
+            <div class="overlay">
+                <div class="shadow-container">
+                    <svg width="460" height="588" viewBox="0 0 460 588" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M440 0H20C8.95431 0 0 8.95431 0 20V157C9.83333 157.333 29.6 163.3 30 184.5C30.4 205.7 10.1667 210.333 0 210V568C0 579.046 8.9543 588 20 588H440C451.046 588 460 579.046 460 568V209.5C448.5 210.5 425.6 206.6 426 183C426.4 159.4 448.833 156.833 460 158.5V20C460 8.9543 451.046 0 440 0Z" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content-box">
+                    <div class="circle">
+                        <svg width="57" height="56" viewBox="0 0 57 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="28.7397" cy="28" r="28" fill="#41D195" fill-opacity="0.12"/>
+                            <path d="M28.2397 14.6665C20.893 14.6665 14.9064 20.6532 14.9064 27.9998C14.9064 35.3465 20.893 41.3332 28.2397 41.3332C35.5864 41.3332 41.573 35.3465 41.573 27.9998C41.573 20.6532 35.5864 14.6665 28.2397 14.6665ZM34.613 24.9332L27.053 32.4932C26.8664 32.6798 26.613 32.7865 26.3464 32.7865C26.0797 32.7865 25.8264 32.6798 25.6397 32.4932L21.8664 28.7198C21.4797 28.3332 21.4797 27.6932 21.8664 27.3065C22.253 26.9198 22.893 26.9198 23.2797 27.3065L26.3464 30.3732L33.1997 23.5198C33.5864 23.1332 34.2264 23.1332 34.613 23.5198C34.9997 23.9065 34.9997 24.5332 34.613 24.9332Z" fill="#41D195"/>
+                        </svg>
+                        <div class="arrow-container">
+                            <div class="arrow">
+                                <div class="arrow-up"></div>
+                                <div class="arrow-down"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-container">
+                        <div class="text-bold">Steam Deposit</div>
+                        <div class="text-bold">Платеж выполнен успешно</div>
+                        <div class="text-default">Номер платежа: {{payment_number}}</div>
+                        <div class="line"></div>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <div class="info">
+                        <div class="info-row">
+                            <div class="info-label">Назначение:</div>
+                            <div class="info-value">{{target}}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Дата:</div>
+                            <div class="info-value">{{date}}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Логин:</div>
+                            <div class="info-value">{{steam_login}}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Сумма к зачислению:</div>
+                            <div class="info-value">${{deposit_sum}}</div>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="info-row">
+                        <div class="info-label">Оплачено:</div>
+                        <div class="info-value">${{payment_sum}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
