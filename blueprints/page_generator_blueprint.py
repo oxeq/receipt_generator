@@ -1,13 +1,12 @@
-import traceback
-
-from flask import Blueprint
-from flask import Flask, render_template
-from objects.db import db
-from sqlalchemy import select, delete
-import random
-import string
-from flask import request
 import json
+import pytz
+
+from datetime import datetime
+from flask import Blueprint
+from flask import render_template
+from objects.db import db
+from sqlalchemy import select
+from flask import request
 from objects.receipt import ReceiptInfo
 from auth.auth import check_receipt_token
 
@@ -71,9 +70,12 @@ def get_receipt():
     if len(data) == 0:
         return json.dumps({'success': False, 'error': 1})
     else:
-        date = data[0][0]
+
+        utc_time = datetime.utcfromtimestamp(data[0][0])
+        moscow_tz = pytz.timezone('Europe/Moscow')
+        date = utc_time.replace(tzinfo=pytz.utc).astimezone(moscow_tz).strftime('%Y-%m-%d %H:%M:%S')
         steam_login = data[0][1]
-        deposit_sum = data[0][2]
+        deposit_sum = data[0][2] / 100
 
         return render_template(
                 'page.html',

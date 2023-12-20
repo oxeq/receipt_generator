@@ -1,5 +1,4 @@
 from flask import Flask
-from sqlalchemy.orm import DeclarativeBase
 from objects.db import db
 from blueprints.page_generator_blueprint import page_generator_blueprint
 

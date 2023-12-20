@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap&subset=cyrillic">
+    <title>Receipt Steam Deposit</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
@@ -36,11 +36,12 @@
                     <div class="text-container">
                         <div class="text-bold">Steam Deposit</div>
                         <div class="text-bold">Платеж выполнен успешно</div>
-                        <div class="text-default">Номер платежа: {{payment_number}}</div>
-                        <div class="line"></div>
+                        <div class="text-bold">Номер платежа</div>
+                        <div class="text-default">{{payment_number}}</div>
                     </div>
                 </div>
                 <div class="info-box">
+                    <div class="line"></div>
                     <div class="info">
                         <div class="info-row">
                             <div class="info-label">Назначение:</div>
