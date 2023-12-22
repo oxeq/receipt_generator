@@ -20,4 +20,4 @@ server = create_app()
 
 
 if __name__ == '__main__':
-    server.run(port=8881)
+    server.run(threaded=False)
