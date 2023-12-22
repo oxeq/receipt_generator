@@ -23,7 +23,7 @@ def add_receipt():
         steam_login = str(request.json['steam_login'])
         sum_ = int(request.json['sum_'])
     except:
-        return json.dumps({'success': False, 'error': 0})
+        return json.dumps({'success': False, 'error': 'bad_data'})
 
     with db.session() as db_session:
         data = db_session.execute(select(ReceiptInfo).where(
@@ -58,7 +58,7 @@ def get_receipt():
     try:
         transaction_id = str(request.args['transaction_id'])
     except:
-        return json.dumps({'success': False, 'error': 0})
+        return json.dumps({'success': False, 'error': 'bad_data'})
 
     # получение информации
     with db.session() as db_session:
@@ -68,7 +68,7 @@ def get_receipt():
         db_session.close()
 
     if len(data) == 0:
-        return json.dumps({'success': False, 'error': 1})
+        return json.dumps({'success': False, 'error': 'receipt_not_exist'})
     else:
 
         utc_time = datetime.utcfromtimestamp(data[0][0])
