@@ -13,7 +13,7 @@ from auth.auth import check_receipt_token
 page_generator_blueprint = Blueprint('page_generator', __name__)
 
 
-@page_generator_blueprint.route('/receipt/add_receipt', methods=['POST'])
+@page_generator_blueprint.route('/add_receipt', methods=['POST'])
 @check_receipt_token
 def add_receipt():
 
