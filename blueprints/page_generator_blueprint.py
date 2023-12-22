@@ -51,19 +51,13 @@ def add_receipt():
         return json.dumps({'success': True})
 
 
-@page_generator_blueprint.route('/get_receipt', methods=['GET'])
-def get_receipt():
-
-    # получение информации о чеке
-    try:
-        transaction_id = str(request.args['transaction_id'])
-    except:
-        return json.dumps({'success': False, 'error': 'bad_data'})
+@page_generator_blueprint.route('/transaction=<uuid>', methods=['GET'])
+def get_receipt(uuid):
 
     # получение информации
     with db.session() as db_session:
         data = db_session.execute(select(ReceiptInfo.date, ReceiptInfo.steam_login, ReceiptInfo.sum).where(
-            ReceiptInfo.transaction_id == transaction_id,
+            ReceiptInfo.transaction_id == uuid,
         ).limit(1)).all()
         db_session.close()
 
@@ -79,7 +73,7 @@ def get_receipt():
 
         return render_template(
                 'page.html',
-                payment_number=transaction_id,
+                payment_number=uuid,
                 target='Steam СНГ',
                 date=date,
                 steam_login=steam_login,
