@@ -63,20 +63,24 @@ def get_receipt(uuid):
 
     if len(data) == 0:
         return json.dumps({'success': False, 'error': 'receipt_not_exist'})
-    else:
 
-        utc_time = datetime.utcfromtimestamp(data[0][0])
-        moscow_tz = pytz.timezone('Europe/Moscow')
-        date = utc_time.replace(tzinfo=pytz.utc).astimezone(moscow_tz).strftime('%Y-%m-%d %H:%M:%S')
-        steam_login = data[0][1]
-        deposit_sum = data[0][2] / 100
 
-        return render_template(
-                'page.html',
-                payment_number=uuid,
-                target='Steam СНГ',
-                date=date,
-                steam_login=steam_login,
-                deposit_sum=deposit_sum,
-                payment_sum=deposit_sum
-            )
+    utc_time = datetime.utcfromtimestamp(data[0][0])
+    moscow_tz = pytz.timezone('Europe/Moscow')
+
+    date = utc_time.replace(tzinfo=pytz.utc).astimezone(moscow_tz).strftime('%Y-%m-%d %H:%M:%S')
+    steam_login = data[0][1]
+    deposit_sum = data[0][2] / 100
+
+    if deposit_sum.is_integer():
+        deposit_sum = int(deposit_sum)
+
+    return render_template(
+            'page.html',
+            payment_number=uuid,
+            target='Steam СНГ',
+            date=date,
+            steam_login=steam_login,
+            deposit_sum=deposit_sum,
+            payment_sum=deposit_sum
+        )
